@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>web-editor</title>
+  <title>Web Explorer</title>
   <style>
 [v-cloak] {
   display: none;
@@ -13,9 +13,13 @@
 
 <body>
   <div id="editorApp">
+    <catalog v-if="showCatalog" @close="handleCatalogSelection"></catalog>
     <nav v-cloak>
       <div id="logo">
         <span>Web</span> Explorer
+      </div>
+      <div>
+        <button class="btn-icon open-catalog" @click="showCatalog=true"></button>
       </div>
       <div class="flex"></div>
       <button :class="{on: panels.html.visible}" @click="panels.html.visible=!panels.html.visible">HTML</button>
@@ -24,15 +28,15 @@
       <button :class="{on: panels.output.visible}" @click="panels.output.visible=!panels.output.visible">Output</button>
       <div class="flex"></div>
       <div>
-        <button id="font-plus" @click="options.fontSize--"></button>
-        <button id="font-minus" @click="options.fontSize++"></button>
-        <form method="POST" action="https://fritscher.ch/html/" target="_blank" id="externalPreview">
+        <button class="btn-icon font-minus" @click="options.fontSize--"></button>
+        <button class="btn-icon font-plus" @click="options.fontSize++"></button>
+        <form method="POST" action="https://fritscher.ch/html/" target="_blank" class="externalPreview">
           <textarea name="html" v-model="preview"></textarea>
-          <input type="submit" value="">
+          <input type="submit" value="" class="btn-icon">
         </form>
       </div>
     </nav>
-    <input v-model.number="options.fontSize" type="number">
+
     <div class="edit" v-cloak>
       <transition name="fade">
       <panel v-if="!(panels.html || panels.css || panels.javascript || panels.output)">
@@ -58,7 +62,7 @@
       <panel v-if="panels.output.visible" v-model="panels.output">
         <iframe ref="preview"></iframe>
         <div id="console" v-if="outputConsole.length > 0" :style="{'font-size': options.fontSize + 'px'}">
-          <button @click="outputConsole = []" id="clear"></button>
+          <button @click="outputConsole = []" class="btn-icon clear"></button>
           <pre v-for="l in outputConsole" v-cloak>{{l}}</pre>
         </div>
       </panel>

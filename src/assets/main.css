@@ -34,6 +34,10 @@ html, body
       color: #006AC3;
 }
 
+a, a:visited {
+  color: #006AC3;
+}
+
 #editorApp {
   width: 100%;
   height: 100%;
@@ -67,16 +71,18 @@ html, body
 #editorApp>nav * {
   opacity: 0;
   transition: 0.3s ease-in-out;
+  pointer-events: none;
 }
 
-#editorApp>nav{
+#editorApp>nav:hover{
   max-height: 100px;
   backdrop-filter: blur(2px);
   box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.4);
 }
 
-#editorApp>nav * {
+#editorApp>nav:hover * {
   opacity: 1;
+  pointer-events: inherit;
 }
 
 #editorApp>nav>button {
@@ -102,10 +108,8 @@ html, body
   background: rgba(224, 224, 224, 0.8);
 }
 
-#font-plus,
-#font-minus,
-#externalPreview>input,
-#clear {
+.btn-icon
+{
   border: 0;
   padding: 0;
   width: 40px;
@@ -116,31 +120,35 @@ html, body
   outline: none;
 }
 
-#externalPreview {
+.externalPreview {
   display: inline-block;
 }
 
-#externalPreview>textarea {
+.externalPreview>textarea {
   display: none;
 }
 
-#externalPreview>input {
+.externalPreview>input {
   background-image: url('ic_open_in_new_black_24px.svg');
 }
 
-#font-plus {
+.font-plus {
   background-image: url('ic_zoom_in_black_24px.svg');
 }
 
-#font-minus {
+.font-minus {
   background-image: url('ic_zoom_out_black_24px.svg');
 }
 
-#clear {
+.clear {
   background-image: url('ic_clear_black_24px.svg');
   position: absolute;
   top: 0;
   right: 0;
+}
+
+.open-catalog {
+  background-image: url('ic_folder_open_black_24px.svg');
 }
 
 .edit {

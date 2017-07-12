@@ -17,7 +17,8 @@
     "emmet": "^1.6.3",
     "monaco-editor": "^0.9.0",
     "uuid": "^3.1.0",
-    "vue": "^2.3.3"
+    "vue": "^2.3.3",
+    "vue-moment": "^2.0.2"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",

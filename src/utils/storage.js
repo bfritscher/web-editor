@@ -13,3 +13,20 @@ export function load(key, defaultValue) {
     return defaultValue || {};
   }
 }
+
+export const catalog = load(CATALOG);
+
+export function updateCatalog(id, title) {
+  catalog[id] = {
+    id,
+    title,
+    lastSaved: new Date().toISOString()
+  };
+  save(CATALOG, catalog);
+}
+
+export function deleteFromCatalog(id) {
+  delete catalog[id];
+  save(CATALOG, catalog);
+  localStorage.removeItem(id);
+}

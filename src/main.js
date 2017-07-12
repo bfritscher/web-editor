@@ -1,13 +1,16 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
+import vueMoment from 'vue-moment';
 import uuidv4 from 'uuid/v4';
 import panel from './components/Panel';
 import editor from './components/Editor';
+import catalog from './components/Catalog';
 
 import './assets/main.css';
 import * as storage from './utils/storage';
 
+Vue.use(vueMoment);
 Vue.config.productionTip = false;
 
 window.require(['vs/editor/editor.main'], () => {
@@ -15,39 +18,7 @@ window.require(['vs/editor/editor.main'], () => {
   new Vue({
     el: '#editorApp',
     data() {
-      const options = storage.load(storage.OPTIONS, {
-        fontSize: 18
-      });
-      const data = Object.assign({
-        id: uuidv4(),
-        options,
-        panels: {
-          html: {
-            visible: true,
-            width: 'auto'
-          },
-          css: {
-            visible: true,
-            width: 'auto'
-          },
-          javascript: {
-            visible: true,
-            width: 'auto'
-          },
-          output: {
-            visible: true,
-            width: 'auto'
-          }
-        },
-        values: {
-          html: '<h1>test</h1>',
-          css: 'h1 { color: red; }',
-          javascript: `function x() {
-\tconsole.log("Hello world!");
-}`
-        },
-        outputConsole: []
-      }, this.load());
+      const data = Object.assign(this.defaultNewPage(), this.load());
       return data;
     },
     mounted() {
@@ -155,11 +126,66 @@ window.require(['vs/editor/editor.main'], () => {
           values: this.values
         });
         storage.save(storage.LAST, this.id);
+        let title = this.values.html.replace(/<.*?>/g, '');
+        if (title.length > 70) {
+          title = `${title.slice(0, 70)}...`;
+        }
+        storage.updateCatalog(this.id, title);
+      },
+      defaultNewPage() {
+        const options = storage.load(storage.OPTIONS, {
+          fontSize: 18
+        });
+        return {
+          id: uuidv4(),
+          showCatalog: false,
+          options,
+          panels: {
+            html: {
+              visible: true,
+              width: '25%'
+            },
+            css: {
+              visible: true,
+              width: '25%'
+            },
+            javascript: {
+              visible: true,
+              width: '25%'
+            },
+            output: {
+              visible: true,
+              width: '25%'
+            }
+          },
+          values: {
+            html: '',
+            css: '',
+            javascript: ''
+          },
+          outputConsole: []
+        };
+      },
+      newPage() {
+        const newData = this.defaultNewPage();
+        Object.keys(newData).forEach(key => this.$set(this, key, newData[key]));
+      },
+      handleCatalogSelection(id) {
+        if (id === 'new') {
+          this.newPage();
+        } else if (id) {
+          const loadedPage = this.load(id);
+          if (loadedPage.id === id) {
+            Object.keys(loadedPage).forEach(key => this.$set(this, key, loadedPage[key]));
+          }
+        }
+        this.showCatalog = false;
       }
     },
     components: {
       panel,
-      editor
+      editor,
+      catalog
     }
   });
 });
