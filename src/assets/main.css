@@ -15,7 +15,9 @@ html, body
   font-family: Arial, Verdana, Helvetica, sans-serif;
 }
 
-
+.loaded .loaderBox {
+  display: none;
+}
 
 .flex {
   flex: 1;

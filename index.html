@@ -8,11 +8,110 @@
 [v-cloak] {
   display: none;
 }
+
+*, *:before, *:after
+{
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+html, body
+{
+  width: 100%;
+  height: 100%;
+  background-color: #fffffe;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Verdana, Helvetica, sans-serif;
+}
+
+#editorApp {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: flex-start; /* align items in Main Axis */
+  align-items: stretch; /* align items in Cross Axis */
+  align-content: stretch; /* Extra space in Cross Axis */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  border-bottom: 1px solid #bdbdbd;
+}
+
+.loaderBox {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.loader,
+.loader:before,
+.loader:after {
+  background: #006ac3;
+  -webkit-animation: load1 1s infinite ease-in-out;
+  animation: load1 1s infinite ease-in-out;
+  width: 1em;
+  height: 4em;
+}
+.loader {
+  color: #006ac3;
+  text-indent: -9999em;
+  position: relative;
+  font-size: 11px;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+  margin-bottom: 80px;
+}
+.loader:before,
+.loader:after {
+  position: absolute;
+  top: 0;
+  content: '';
+}
+.loader:before {
+  left: -1.5em;
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+.loader:after {
+  left: 1.5em;
+}
+@-webkit-keyframes load1 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0;
+    height: 4em;
+  }
+  40% {
+    box-shadow: 0 -2em;
+    height: 5em;
+  }
+}
+@keyframes load1 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0;
+    height: 4em;
+  }
+  40% {
+    box-shadow: 0 -2em;
+    height: 5em;
+  }
+}
 </style>
 </head>
 
 <body>
-  <div id="editorApp" :class="{'menu-always-show': options.menuAlwaysShow}">
+  <div id="editorApp" :class="{'menu-always-show': options.menuAlwaysShow, 'loaded': isLoaded}">
+    <div class="loaderBox"><div class="loader">Loading...</div></div>
     <catalog v-if="showCatalog" @close="handleCatalogSelection"></catalog>
     <nav v-cloak @dblclick="toggleMenu">
       <div id="logo">
@@ -61,7 +160,7 @@
       <transition name="fade">
       <panel v-if="panels.output.visible" v-model="panels.output">
         <iframe ref="preview"></iframe>
-        <div id="console" v-if="outputConsole.length > 0" :style="{'font-size': options.fontSize + 'px'}">
+        <div id="console" v-if="outputConsole.length > 0" :style="{'font-size': options.fontSize + 'px'}" v-cloak>
           <button @click="outputConsole = []" class="btn-icon clear"></button>
           <pre v-for="l in outputConsole" v-cloak>{{l}}</pre>
         </div>

@@ -156,6 +156,7 @@ window.require(['vs/editor/editor.main'], () => {
         return {
           id: uuidv4(),
           showCatalog: false,
+          isLoaded: true,
           options,
           panels: {
             html: {
