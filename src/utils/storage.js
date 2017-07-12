@@ -8,7 +8,11 @@ export function save(key, object) {
 
 export function load(key, defaultValue) {
   try {
-    return JSON.parse(localStorage.getItem(key));
+    const object = JSON.parse(localStorage.getItem(key));
+    if (!object) {
+      return defaultValue || {};
+    }
+    return object;
   } catch (e) {
     return defaultValue || {};
   }
