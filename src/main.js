@@ -38,6 +38,9 @@ window.require(['vs/editor/editor.main'], () => {
       this.updatePreview();
       window.addEventListener('message', (message) => {
         let txt = message.data;
+        if (typeof txt === 'object' && 'vueDetected' in txt) {
+          return;
+        }
         if (message.data.join) {
           txt = message.data.join(', ');
         }
@@ -82,7 +85,7 @@ window.require(['vs/editor/editor.main'], () => {
         } else {
           fullHtml += '  <head>\n';
         }
-        fullHtml += `    <style>\n${this.values.css}\n    </style>\n</head>\n`;
+        fullHtml += `    <style>\n${this.values.css}\n    </style>\n<script>console.log = function () {for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}parent.postMessage(args, "*");};</script></head>\n`;
 
         const bodyMatch = this.values.html.match(/(<body(?:.|[\n\r])*)?<\/body>/mi);
         if (bodyMatch) {
@@ -95,12 +98,6 @@ window.require(['vs/editor/editor.main'], () => {
           fullHtml += this.values.html;
         }
         fullHtml += `   <script>
-      console.log = function () {
-        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-          args[_key] = arguments[_key];
-        }
-        parent.postMessage(args, '*');
-      };
       ${this.values.javascript}
       </script>
   </body>
