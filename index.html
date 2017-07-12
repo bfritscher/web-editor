@@ -18,10 +18,10 @@
         <span>Web</span> Explorer
       </div>
       <div class="flex"></div>
-      <button :class="{on: panels.html}" @click="panels.html=!panels.html">HTML</button>
-      <button :class="{on: panels.css}" @click="panels.css=!panels.css">CSS</button>
-      <button :class="{on: panels.javascript}" @click="panels.javascript=!panels.javascript">JavaScript</button>
-      <button :class="{on: panels.output}" @click="panels.output=!panels.output">Output</button>
+      <button :class="{on: panels.html.visible}" @click="panels.html.visible=!panels.html.visible">HTML</button>
+      <button :class="{on: panels.css.visible}" @click="panels.css.visible=!panels.css.visible">CSS</button>
+      <button :class="{on: panels.javascript.visible}" @click="panels.javascript.visible=!panels.javascript.visible">JavaScript</button>
+      <button :class="{on: panels.output.visible}" @click="panels.output.visible=!panels.output.visible">Output</button>
       <div class="flex"></div>
       <div>
         <button id="font-plus" @click="options.fontSize--"></button>
@@ -40,22 +40,22 @@
       </panel>
       </transition>
       <transition name="fade">
-      <panel v-if="panels.html">
+      <panel v-if="panels.html.visible" v-model="panels.html">
         <editor language="html" v-model="values.html" :options="options"></editor>
       </panel>
       </transition>
       <transition name="fade">
-      <panel v-if="panels.css">
+      <panel v-if="panels.css.visible" v-model="panels.css">
         <editor language="css" v-model="values.css" :options="options"></editor>
       </panel>
       </transition>
       <transition name="fade">
-      <panel v-if="panels.javascript">
+      <panel v-if="panels.javascript.visible" v-model="panels.javascript">
         <editor language="javascript" v-model="values.javascript" :options="options"></editor>
       </panel>
       </transition>
       <transition name="fade">
-      <panel v-if="panels.output">
+      <panel v-if="panels.output.visible" v-model="panels.output">
         <iframe ref="preview"></iframe>
         <div id="console" v-if="outputConsole.length > 0" :style="{'font-size': options.fontSize + 'px'}">
           <button @click="outputConsole = []" id="clear"></button>

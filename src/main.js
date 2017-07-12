@@ -1,11 +1,12 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
+import uuidv4 from 'uuid/v4';
 import panel from './components/Panel';
 import editor from './components/Editor';
 
 import './assets/main.css';
-import storage from './utils/storage';
+import * as storage from './utils/storage';
 
 Vue.config.productionTip = false;
 
@@ -17,14 +18,26 @@ window.require(['vs/editor/editor.main'], () => {
       const options = storage.load(storage.OPTIONS, {
         fontSize: 18
       });
-      return {
+      const data = Object.assign({
+        id: uuidv4(),
         options,
         panels: {
-          html: true,
-          css: true,
-          javascript: true,
-          output: true,
-          console: true
+          html: {
+            visible: true,
+            width: 'auto'
+          },
+          css: {
+            visible: true,
+            width: 'auto'
+          },
+          javascript: {
+            visible: true,
+            width: 'auto'
+          },
+          output: {
+            visible: true,
+            width: 'auto'
+          }
         },
         values: {
           html: '<h1>test</h1>',
@@ -34,7 +47,8 @@ window.require(['vs/editor/editor.main'], () => {
 }`
         },
         outputConsole: []
-      };
+      }, this.load());
+      return data;
     },
     mounted() {
       this.updatePreview();
@@ -50,12 +64,14 @@ window.require(['vs/editor/editor.main'], () => {
       values: {
         handler() {
           this.updatePreview();
+          this.save();
         },
         deep: true
       },
       panels: {
         handler() {
           setTimeout(() => this.$emit('resized'), 510);
+          this.save();
         },
         deep: true
       },
@@ -118,6 +134,27 @@ window.require(['vs/editor/editor.main'], () => {
         win.open();
         win.write(this.preview);
         win.close();
+      },
+      load(id) {
+        let idToLoad = id;
+        if (!idToLoad) {
+          idToLoad = storage.load(storage.LAST);
+        }
+        if (idToLoad) {
+          const data = storage.load(idToLoad);
+          if (data.id === idToLoad) {
+            return data;
+          }
+        }
+        return undefined;
+      },
+      save() {
+        storage.save(this.id, {
+          id: this.id,
+          panels: this.panels,
+          values: this.values
+        });
+        storage.save(storage.LAST, this.id);
       }
     },
     components: {
