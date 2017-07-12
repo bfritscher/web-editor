@@ -13,12 +13,26 @@ import * as storage from './utils/storage';
 Vue.use(vueMoment);
 Vue.config.productionTip = false;
 
+function deepAssign(target, source) {
+  Object.keys(source).forEach((prop) => {
+    if (typeof source[prop] === 'object' && typeof target[prop] === 'object') {
+      deepAssign(target[prop], source[prop]);
+    } else {
+      // eslint-disable-next-line
+      target[prop] = source[prop];
+    }
+  });
+
+  return target;
+}
+
+
 window.require(['vs/editor/editor.main'], () => {
   /* eslint-disable no-new */
   new Vue({
     el: '#editorApp',
     data() {
-      return Object.assign(this.defaultNewPage(), this.load());
+      return deepAssign(this.defaultNewPage(), this.load());
     },
     mounted() {
       this.updatePreview();
@@ -108,6 +122,9 @@ window.require(['vs/editor/editor.main'], () => {
       load(id) {
         let idToLoad = id;
         if (!idToLoad) {
+          if (window.post) {
+            return window.post;
+          }
           idToLoad = storage.load(storage.LAST);
         }
         if (idToLoad) {
@@ -116,7 +133,7 @@ window.require(['vs/editor/editor.main'], () => {
             return data;
           }
         }
-        return undefined;
+        return {};
       },
       save() {
         storage.save(this.id, {
