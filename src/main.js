@@ -85,7 +85,7 @@ window.require(['vs/editor/editor.main'], () => {
         } else {
           fullHtml += '  <head>\n';
         }
-        fullHtml += `    <style>\n${this.values.css}\n    </style>\n<script>console.log = function () {for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}parent.postMessage(args, "*");};</script></head>\n`;
+        fullHtml += `    <style>\n${this.values.css}\n    </style>\n<script>console.log = function () {for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {args[_key] = arguments[_key];}parent.postMessage(args, "*");};</script>\n  </head>\n`;
 
         const bodyMatch = this.values.html.match(/(<body(?:.|[\n\r])*)?<\/body>/mi);
         if (bodyMatch) {
