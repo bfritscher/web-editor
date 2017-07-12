@@ -18,8 +18,7 @@ window.require(['vs/editor/editor.main'], () => {
   new Vue({
     el: '#editorApp',
     data() {
-      const data = Object.assign(this.defaultNewPage(), this.load());
-      return data;
+      return Object.assign(this.defaultNewPage(), this.load());
     },
     mounted() {
       this.updatePreview();
@@ -134,7 +133,8 @@ window.require(['vs/editor/editor.main'], () => {
       },
       defaultNewPage() {
         const options = storage.load(storage.OPTIONS, {
-          fontSize: 18
+          fontSize: 18,
+          menuAlwaysShow: true
         });
         return {
           id: uuidv4(),
@@ -180,6 +180,10 @@ window.require(['vs/editor/editor.main'], () => {
           }
         }
         this.showCatalog = false;
+      },
+      toggleMenu() {
+        this.options.menuAlwaysShow = !this.options.menuAlwaysShow;
+        this.$emit('resized');
       }
     },
     components: {

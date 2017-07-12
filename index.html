@@ -12,9 +12,9 @@
 </head>
 
 <body>
-  <div id="editorApp">
+  <div id="editorApp" :class="{'menu-always-show': options.menuAlwaysShow}">
     <catalog v-if="showCatalog" @close="handleCatalogSelection"></catalog>
-    <nav v-cloak>
+    <nav v-cloak @dblclick="toggleMenu">
       <div id="logo">
         <span>Web</span> Explorer
       </div>
