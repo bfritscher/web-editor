@@ -55,22 +55,45 @@ window.require(['vs/editor/editor.main'], () => {
     },
     computed: {
       preview() {
-        return `<html>
-  <head>
-    <style>
-      ${this.values.css}
-    </style>
-  </head>
-  <body>
-    ${this.values.html}
-    <script>
-      console.log = (...args) => {
+        let fullHtml = '';
+        const htmlMatch = this.values.html.match(/(^(?:.|[\n\r])*?)(?:<head>|<body)/mi);
+        if (htmlMatch) {
+          fullHtml = htmlMatch[1];
+        } else {
+          fullHtml = '<html>\n';
+        }
+
+        const headMatch = this.values.html.match(/(<head>(?:.|[\n\r])*)<\/head>/mi);
+        if (headMatch) {
+          fullHtml += headMatch[1];
+        } else {
+          fullHtml += '  <head>\n';
+        }
+        fullHtml += `    <style>\n${this.values.css}\n    </style>\n</head>\n`;
+
+        const bodyMatch = this.values.html.match(/(<body(?:.|[\n\r])*)?<\/body>/mi);
+        if (bodyMatch) {
+          if (bodyMatch[1]) {
+            fullHtml += bodyMatch[1];
+          } else {
+            fullHtml += '<body>\n<h1 style="color:red">HTML ERROR</h1>';
+          }
+        } else {
+          fullHtml += this.values.html;
+        }
+        fullHtml += `   <script>
+      console.log = function () {
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+          args[_key] = arguments[_key];
+        }
         parent.postMessage(args, '*');
       };
       ${this.values.javascript}
-</script>
+      </script>
   </body>
 </html>`;
+
+        return fullHtml;
       }
     },
     methods: {
