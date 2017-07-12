@@ -17,11 +17,22 @@
       <div id="logo">
         <span>Web</span> Explorer
       </div>
+      <div class="flex"></div>
       <button :class="{on: panels.html}" @click="panels.html=!panels.html">HTML</button>
       <button :class="{on: panels.css}" @click="panels.css=!panels.css">CSS</button>
       <button :class="{on: panels.javascript}" @click="panels.javascript=!panels.javascript">JavaScript</button>
       <button :class="{on: panels.output}" @click="panels.output=!panels.output">Output</button>
+      <div class="flex"></div>
+      <div>
+        <button id="font-plus" @click="options.fontSize--"></button>
+        <button id="font-minus" @click="options.fontSize++"></button>
+        <form method="POST" action="https://fritscher.ch/html/" target="_blank" id="externalPreview">
+          <textarea name="html" v-model="preview"></textarea>
+          <input type="submit" value="">
+        </form>
+      </div>
     </nav>
+    <input v-model.number="options.fontSize" type="number">
     <div class="edit" v-cloak>
       <transition name="fade">
       <panel v-if="!(panels.html || panels.css || panels.javascript || panels.output)">
@@ -30,30 +41,26 @@
       </transition>
       <transition name="fade">
       <panel v-if="panels.html">
-        <editor language="html" v-model="values.html"></editor>
+        <editor language="html" v-model="values.html" :options="options"></editor>
       </panel>
       </transition>
       <transition name="fade">
       <panel v-if="panels.css">
-        <editor language="css" v-model="values.css"></editor>
+        <editor language="css" v-model="values.css" :options="options"></editor>
       </panel>
       </transition>
       <transition name="fade">
       <panel v-if="panels.javascript">
-        <editor language="javascript" v-model="values.javascript"></editor>
+        <editor language="javascript" v-model="values.javascript" :options="options"></editor>
       </panel>
       </transition>
       <transition name="fade">
       <panel v-if="panels.output">
         <iframe ref="preview"></iframe>
-        <div id="console" v-if="outputConsole.length > 0">
-          <button @click="outputConsole = []">clear</button>
+        <div id="console" v-if="outputConsole.length > 0" :style="{'font-size': options.fontSize + 'px'}">
+          <button @click="outputConsole = []" id="clear"></button>
           <pre v-for="l in outputConsole" v-cloak>{{l}}</pre>
         </div>
-        <form method="POST" action="https://fritscher.ch/html/" target="_blank" id="externalPreview">
-          <textarea name="html" v-model="preview"></textarea>
-          <input type="submit" value="">
-        </form>
       </panel>
       </transition>
     </div>

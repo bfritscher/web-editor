@@ -36,7 +36,7 @@ const enableEmmet = (editor, emmetInstance) => {
       if (expandText) {
         // replace range content: pos.column , pos.column -word.length;
         const range = new window.monaco.Range(pos.lineNumber, pos.column - word.length,
-                                              pos.lineNumber, pos.column);
+          pos.lineNumber, pos.column);
         const id = { major: 1, minor: 1 };
         const op = { identifier: id, range, text: expandText, forceMoveMarkers: true };
         editor.executeEdits('', [op]);
@@ -48,6 +48,7 @@ const enableEmmet = (editor, emmetInstance) => {
 export default {
   props: {
     language: { type: String, default: 'javascript' },
+    options: { type: Object, default: {} },
     value: { type: String, default: '' }
   },
   template: '<div :class="{focused}"></div>',
@@ -59,11 +60,10 @@ export default {
     };
   },
   mounted() {
-    this.editor = window.monaco.editor.create(this.$el, {
+    this.editor = window.monaco.editor.create(this.$el, Object.assign({
       value: this.value,
       language: this.language,
       autoIndent: false,
-      fontSize: 18,
       formatOnPaste: true,
       lineNumbersMinChars: 0,
       minimap: {
@@ -78,7 +78,7 @@ export default {
         verticalScrollbarSize: 8,
         horizontalScrollbarSize: 8
       }
-    });
+    }, this.options));
     this.$parent.$on('resized', () => {
       this.$nextTick(() => this.editor.layout());
     });
@@ -95,6 +95,9 @@ export default {
       this.$emit('blur');
       this.focused = false;
     });
+    window.addEventListener('resize', () => {
+      this.editor.layout();
+    }, false);
   },
   destroyed() {
     if (typeof this.editor !== 'undefined') {
@@ -109,6 +112,13 @@ export default {
       if (newValue !== this.internalValue) {
         this.editor.setValue(newValue);
       }
+    },
+    options: {
+      handler() {
+        if (!this.editor) return;
+        this.editor.updateOptions(this.options);
+      },
+      deep: true
     }
   }
 };

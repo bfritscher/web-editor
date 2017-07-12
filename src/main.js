@@ -5,6 +5,7 @@ import panel from './components/Panel';
 import editor from './components/Editor';
 
 import './assets/main.css';
+import storage from './utils/storage';
 
 Vue.config.productionTip = false;
 
@@ -12,22 +13,28 @@ window.require(['vs/editor/editor.main'], () => {
   /* eslint-disable no-new */
   new Vue({
     el: '#editorApp',
-    data: {
-      panels: {
-        html: true,
-        css: true,
-        javascript: true,
-        output: true,
-        console: true
-      },
-      values: {
-        html: '<h1>test</h1>',
-        css: 'h1 { color: red; }',
-        javascript: `function x() {
+    data() {
+      const options = storage.load(storage.OPTIONS, {
+        fontSize: 18
+      });
+      return {
+        options,
+        panels: {
+          html: true,
+          css: true,
+          javascript: true,
+          output: true,
+          console: true
+        },
+        values: {
+          html: '<h1>test</h1>',
+          css: 'h1 { color: red; }',
+          javascript: `function x() {
 \tconsole.log("Hello world!");
 }`
-      },
-      outputConsole: []
+        },
+        outputConsole: []
+      };
     },
     mounted() {
       this.updatePreview();
@@ -49,6 +56,12 @@ window.require(['vs/editor/editor.main'], () => {
       panels: {
         handler() {
           setTimeout(() => this.$emit('resized'), 510);
+        },
+        deep: true
+      },
+      options: {
+        handler() {
+          storage.save(storage.OPTIONS, this.options);
         },
         deep: true
       }

@@ -15,14 +15,19 @@ html, body
   font-family: Arial, Verdana, Helvetica, sans-serif;
 }
 
+
+
+.flex {
+  flex: 1;
+}
+
 #logo {
-  position: absolute;
-  top: 5px;
-  left: 10px;
+  white-space: nowrap;
   color: #666666;
-  padding: 0px;
+  padding: 5px;
   font-weight: bold;
   font-size: 24px;
+  pointer-events: none;
 }
 
 #logo span {
@@ -56,6 +61,7 @@ html, body
   left: 0;
   z-index: 1;
   transition: 0.3s ease-in-out;
+  user-select: none;
 }
 
 #editorApp>nav * {
@@ -63,13 +69,13 @@ html, body
   transition: 0.3s ease-in-out;
 }
 
-#editorApp>nav:hover{
+#editorApp>nav{
   max-height: 100px;
   backdrop-filter: blur(2px);
   box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.4);
 }
 
-#editorApp>nav:hover * {
+#editorApp>nav * {
   opacity: 1;
 }
 
@@ -81,15 +87,60 @@ html, body
   font-size: 14px;
   outline: none;
 }
-#editorApp>nav>button:first-child {
+#editorApp>nav>button:first-of-type {
   border-left: 1px solid #bdbdbd;
 }
 #console {
   border-top: 1px solid #bdbdbd;
 }
 
+#console pre {
+  margin: 0;
+}
+
 #editorApp>nav>button.on {
   background: rgba(224, 224, 224, 0.8);
+}
+
+#font-plus,
+#font-minus,
+#externalPreview>input,
+#clear {
+  border: 0;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  outline: none;
+}
+
+#externalPreview {
+  display: inline-block;
+}
+
+#externalPreview>textarea {
+  display: none;
+}
+
+#externalPreview>input {
+  background-image: url('ic_open_in_new_black_24px.svg');
+}
+
+#font-plus {
+  background-image: url('ic_zoom_in_black_24px.svg');
+}
+
+#font-minus {
+  background-image: url('ic_zoom_out_black_24px.svg');
+}
+
+#clear {
+  background-image: url('ic_clear_black_24px.svg');
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .edit {
@@ -145,40 +196,19 @@ iframe {
   flex: 1;
 }
 
-div:hover>iframe {
+div:hover >  iframe {
   pointer-events: all;
 }
 
-#externalPreview>textarea {
-  display: none;
-}
 
-#externalPreview>input {
-  border: 0;
-  width: 30px;
-  height: 30px;
-  background-image: url('ic_open_in_new_black_24px.svg');
-  background-color: transparent;
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-}
 
 #console {
   height: 200px;
   flex-grow: 0;
   overflow: auto;
   padding: 4px;
+  position: relative;
 }
-
-#console button {
-  position: absolute;
-  bottom: 4px;
-  left: 4px;
-}
-
 
 .edit .monaco-editor,
 .edit .monaco-editor-background,
