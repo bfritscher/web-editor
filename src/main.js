@@ -174,9 +174,25 @@ window.require(['vs/editor/editor.main'], () => {
             }
           },
           values: {
-            html: '',
-            css: '',
-            javascript: ''
+            html: `<!DOCTYPE html>
+<html>
+  <head>
+    <title>Document Title</title>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+
+  </body>
+</html>
+`,
+            css: `*, *:before, *:after
+{
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+`,
+            javascript: '/* JavaScript */'
           },
           outputConsole: []
         };
