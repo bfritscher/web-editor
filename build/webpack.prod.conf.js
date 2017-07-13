@@ -97,6 +97,10 @@ var webpackConfig = merge(baseWebpackConfig, {
       {
         from: 'node_modules/monaco-editor/min/vs',
         to: 'vs',
+      },
+      {
+        from: 'index.php',
+        to: 'index.php',
       }
     ])
   ]
