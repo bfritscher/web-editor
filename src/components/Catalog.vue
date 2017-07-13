@@ -9,7 +9,9 @@
           </div>
 
           <div class="modal-body">
-            <a v-for="page in sortedCatalog" :key="page.id"  href="#" @click.prevent="$emit('close', page.id)"><span>{{page.title}}</span>{{page.lastSaved | moment('from') }}</a>
+            <a v-for="page in sortedCatalog" :key="page.id"  href="#" @click.prevent="$emit('close', page.id)"><span>{{page.title}}</span>{{page.lastSaved | moment('from') }}
+              <button class="btn-icon delete-forever" @click.prevent.stop="deleteFromCatalog(page.id)"></button>
+            </a>
           </div>
 
           <div class="modal-footer">
@@ -24,7 +26,7 @@
 </template>
 
 <script>
-import { catalog } from '../utils/storage';
+import { catalog, deleteFromCatalog } from '../utils/storage';
 
 export default {
   data() {
@@ -35,6 +37,12 @@ export default {
   computed: {
     sortedCatalog() {
       return Object.values(this.catalog).sort((a, b) => a.lastSaved < b.lastSaved);
+    }
+  },
+  methods: {
+    deleteFromCatalog(id) {
+      this.$delete(catalog, id);
+      deleteFromCatalog(id);
     }
   }
 };
@@ -89,6 +97,7 @@ export default {
 .modal-body a {
   display: flex;
   padding: 4px;
+  align-items: center;
 }
 
 .modal-body a:hover {

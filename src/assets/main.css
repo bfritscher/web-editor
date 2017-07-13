@@ -152,6 +152,10 @@ a, a:visited {
   background-image: url('ic_zoom_out_black_24px.svg');
 }
 
+.delete-forever {
+  background-image: url('ic_delete_forever_black_24px.svg');
+}
+
 .clear {
   background-image: url('ic_clear_black_24px.svg');
   position: absolute;
