@@ -41,6 +41,12 @@ window.require(['vs/editor/editor.main'], () => {
         if (typeof txt === 'object' && 'vueDetected' in txt) {
           return;
         }
+        if (typeof txt === 'object' && 'panels' in txt && 'values' in txt) {
+          window.post = txt;
+          const loadedPage = deepAssign(this.defaultNewPage(), this.load());
+          Object.keys(loadedPage).forEach(key => this.$set(this, key, loadedPage[key]));
+          return;
+        }
         if (message.data.join) {
           txt = message.data.join(', ');
         }
