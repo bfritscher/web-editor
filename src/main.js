@@ -139,7 +139,7 @@ window.require(['vs/editor/editor.main'], () => {
           values: this.values
         });
         storage.save(storage.LAST, this.id);
-        let title = this.values.html.replace(/<.*?>/g, '');
+        let title = this.values.html.replace(/<(?:.|[\n\r])*?>/g, '');
         if (title.length > 70) {
           title = `${title.slice(0, 70)}...`;
         }
