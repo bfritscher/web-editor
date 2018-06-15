@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
 import vueMoment from 'vue-moment';
+import Split from 'split.js';
 import uuidv4 from 'uuid/v4';
 import panel from './components/Panel';
 import editor from './components/Editor';
@@ -26,6 +27,22 @@ function deepAssign(target, source) {
   return target;
 }
 
+function computeSizes(panels) {
+  const sizes = [];
+  if (panels.html.visible) sizes.push(panels.html.width);
+  if (panels.css.visible) sizes.push(panels.css.width);
+  if (panels.javascript.visible) sizes.push(panels.javascript.width);
+  if (panels.output.visible) sizes.push(panels.output.width);
+  return sizes;
+}
+function computePanels(panels) {
+  const ids = [];
+  if (panels.html.visible) ids.push('#html');
+  if (panels.css.visible) ids.push('#css');
+  if (panels.javascript.visible) ids.push('#javascript');
+  if (panels.output.visible) ids.push('#output');
+  return ids;
+}
 
 window.require(['vs/editor/editor.main'], () => {
   /* eslint-disable no-new */
@@ -35,7 +52,7 @@ window.require(['vs/editor/editor.main'], () => {
       return deepAssign(this.defaultNewPage(), this.load());
     },
     mounted() {
-      this.updatePreview();
+      this.createSplit();
       window.addEventListener('message', (message) => {
         let txt = message.data;
         if (typeof txt === 'object' && 'vueDetected' in txt) {
@@ -63,7 +80,10 @@ window.require(['vs/editor/editor.main'], () => {
       },
       panels: {
         handler() {
-          setTimeout(() => this.$emit('resized'), 510);
+          if (this.split) {
+            this.split.destroy();
+          }
+          this.$nextTick(() => this.createSplit());
           this.save();
         },
         deep: true
@@ -113,6 +133,35 @@ window.require(['vs/editor/editor.main'], () => {
       }
     },
     methods: {
+      createSplit() {
+        const vm = this;
+        vm.split = Split(computePanels(this.panels), {
+          gutterSize: 5,
+          sizes: computeSizes(this.panels),
+          onDrag() {
+            window.dispatchEvent(new Event('resize'));
+          },
+          onDragEnd() {
+            // TODO: save sizes, without triggering watcher on panels...
+            console.log(vm.split.getSizes());
+          },
+          elementStyle(dimension, size, gutterSize) {
+            return {
+              'flex-basis': `calc(${size}% - ${gutterSize}px)`
+            };
+          },
+          gutterStyle(dimension, gutterSize) {
+            return {
+              'flex-basis': `${gutterSize}px`
+            };
+          }
+        });
+        this.updatePreview();
+        this.$nextTick(() => {
+          window.dispatchEvent(new Event('resize'));
+          setTimeout(() => window.dispatchEvent(new Event('resize')), 1000);
+        });
+      },
       updatePreview() {
         if (!this.$refs.preview) {
           return;
@@ -164,19 +213,19 @@ window.require(['vs/editor/editor.main'], () => {
           panels: {
             html: {
               visible: true,
-              width: '25%'
+              width: 25
             },
             css: {
               visible: true,
-              width: '25%'
+              width: 25
             },
             javascript: {
               visible: true,
-              width: '25%'
+              width: 25
             },
             output: {
               visible: true,
-              width: '25%'
+              width: 25
             }
           },
           values: {
@@ -220,7 +269,6 @@ window.require(['vs/editor/editor.main'], () => {
       },
       toggleMenu() {
         this.options.menuAlwaysShow = !this.options.menuAlwaysShow;
-        this.$emit('resized');
       }
     },
     components: {

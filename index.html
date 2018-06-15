@@ -45,6 +45,7 @@
       border-bottom: 1px solid #bdbdbd;
     }
 
+
     .loaderBox {
       height: 100%;
       display: flex;
@@ -156,22 +157,22 @@
         </panel>
       </transition>
       <transition name="fade">
-        <panel v-if="panels.html.visible" v-model="panels.html">
+        <panel id="html" v-if="panels.html.visible" v-model="panels.html">
           <editor language="html" v-model="values.html" :options="options"></editor>
         </panel>
       </transition>
       <transition name="fade">
-        <panel v-if="panels.css.visible" v-model="panels.css">
+        <panel id="css" v-if="panels.css.visible" v-model="panels.css">
           <editor language="css" v-model="values.css" :options="options"></editor>
         </panel>
       </transition>
       <transition name="fade">
-        <panel v-if="panels.javascript.visible" v-model="panels.javascript">
+        <panel id="javascript" v-if="panels.javascript.visible" v-model="panels.javascript">
           <editor language="javascript" v-model="values.javascript" :options="options"></editor>
         </panel>
       </transition>
       <transition name="fade">
-        <panel v-if="panels.output.visible" v-model="panels.output">
+        <panel id="output" v-if="panels.output.visible" v-model="panels.output">
           <iframe ref="preview"></iframe>
           <div id="console" v-if="outputConsole.length > 0" :style="{'font-size': options.fontSize + 'px'}" v-cloak>
             <button @click="outputConsole = []" class="btn-icon clear"></button>
@@ -195,4 +196,5 @@
   <script src="vs/loader.js"></script>
 </body>
 
+</html>
 </html>

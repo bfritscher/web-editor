@@ -79,9 +79,6 @@ export default {
         horizontalScrollbarSize: 8
       }
     }, this.options));
-    this.$parent.$on('resized', () => {
-      this.$nextTick(() => this.editor.layout());
-    });
     enableEmmet(this.editor, emmet);
     this.editor.onDidChangeModelContent(() => {
       this.internalValue = this.editor.getValue();

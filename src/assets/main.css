@@ -181,41 +181,38 @@ a, a:visited {
   margin-top: 0px;
 }
 
-.edit>div {
+.edit>div.panel {
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 25%;
-  min-width: 20px;
+  overflow: hidden;
+  flex-grow: 1;
 }
 
-.edit>div:last-child {
-  flex: 1;
+.edit>div.panel.hidden {
+  flex-grow: 0;
 }
 
 .edit>div>div {
   flex-grow: 1;
 }
 
-.handle {
-  position: absolute;
-  top: 0;
-  right: 0;
-  height: 100%;
-  width: 1px;
-  cursor: ew-resize;
-  background-color: #bdbdbd;
-  transition: background-color,width 0.2s;
+
+.gutter {
+  background-color: #eee;
+
+  background-repeat: no-repeat;
+  background-position: 50%;
 }
 
-.handle:hover {
-  width: 3px;
-  background-color: #607d8b;
+.gutter.gutter-horizontal {
+background-image:  url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+cursor: ew-resize;
 }
 
-.edit>div:last-child .handle,
-.edit>div:only-child .handle {
-  display: none;
+.gutter.gutter-vertical {
+background-image:  url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
+cursor: ns-resize;
 }
 
 iframe {
