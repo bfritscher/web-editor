@@ -3,14 +3,22 @@
     <div class="modal-mask" @click="$emit('close')">
       <div class="modal-wrapper">
         <div class="modal-container">
-
           <div class="modal-header">
             <h3>History of documents</h3>
           </div>
 
           <div class="modal-body">
-            <a v-for="page in sortedCatalog" :key="page.id"  href="#" @click.prevent="$emit('close', page.id)"><span>{{page.title}}</span>{{page.lastSaved | moment('from') }}
-              <button class="btn-icon delete-forever" @click.prevent.stop="deleteFromCatalog(page.id)"></button>
+            <a
+              v-for="page in sortedCatalog"
+              :key="page.id"
+              href="#"
+              @click.prevent="$emit('close', page.id)"
+              ><span>{{ page.title }}</span
+              >{{ page.lastSaved | moment("from") }}
+              <button
+                class="btn-icon delete-forever"
+                @click.prevent.stop="deleteFromCatalog(page.id)"
+              ></button>
             </a>
           </div>
 
@@ -26,7 +34,7 @@
 </template>
 
 <script>
-import { catalog, deleteFromCatalog } from '../utils/storage';
+import { catalog, deleteFromCatalog } from "../utils/storage";
 
 export default {
   data() {
@@ -36,7 +44,9 @@ export default {
   },
   computed: {
     sortedCatalog() {
-      return Object.values(this.catalog).sort((a, b) => a.lastSaved < b.lastSaved);
+      return Object.values(this.catalog).sort(
+        (a, b) => a.lastSaved > b.lastSaved
+      );
     }
   },
   methods: {
@@ -56,9 +66,9 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, .5);
+  background-color: rgba(0, 0, 0, 0.5);
   display: table;
-  transition: opacity .3s ease;
+  transition: opacity 0.3s ease;
 }
 
 .modal-wrapper {
@@ -74,8 +84,8 @@ export default {
   padding: 20px 30px;
   background-color: #fff;
   border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
-  transition: all .3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+  transition: all 0.3s ease;
   font-family: Helvetica, Arial, sans-serif;
   flex: 1;
   overflow: hidden;
@@ -86,7 +96,7 @@ export default {
 
 .modal-header h3 {
   margin-top: 0;
-  color: #006AC3;
+  color: #006ac3;
 }
 
 .modal-body {
@@ -101,11 +111,11 @@ export default {
 }
 
 .modal-body a:hover {
-  background-color: #006AC3;
+  background-color: #006ac3;
   color: white;
 }
 
-.modal-body a span{
+.modal-body a span {
   flex: 1;
   padding-right: 20px;
 }
@@ -115,16 +125,15 @@ export default {
 }
 
 .modal-footer button {
-  border: 1px solid #006AC3;
-  background-color: #006AC3;
+  border: 1px solid #006ac3;
+  background-color: #006ac3;
   color: white;
   padding: 10px;
 }
 
 .modal-footer button:hover {
-    background-color: #002AC3;
+  background-color: #002ac3;
 }
-
 
 /*
  * The following styles are auto-applied to elements with

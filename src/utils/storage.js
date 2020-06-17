@@ -1,6 +1,6 @@
-export const OPTIONS = 'options';
-export const CATALOG = 'catalog';
-export const LAST = 'last';
+export const OPTIONS = "options";
+export const CATALOG = "catalog";
+export const LAST = "last";
 
 export function save(key, object) {
   localStorage.setItem(key, JSON.stringify(object));
