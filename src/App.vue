@@ -194,7 +194,9 @@ export default {
         for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
           args[_key] = arguments[_key];
         }
-        parent.postMessage(args, "*");
+        if (parent) {
+          parent.postMessage({type:'console.log', args}, "*");
+        }
       }
       <`;
       fullHtml += "/script>\n</head>";
@@ -253,9 +255,6 @@ export default {
       "message",
       message => {
         let txt = message.data;
-        if (typeof txt === "object" && "vueDetected" in txt) {
-          return;
-        }
         if (typeof txt === "object" && "panels" in txt && "values" in txt) {
           window.post = txt;
           const loadedPage = deepAssign(this.defaultNewPage(), this.load());
@@ -264,10 +263,10 @@ export default {
           );
           return;
         }
-        if (message.data.join) {
-          txt = message.data.join(", ");
+        if (typeof txt === "object" && txt.type === "console.log") {
+          txt = message.data.args.join(", ");
+          this.outputConsole.push(txt);
         }
-        this.outputConsole.push(txt);
       },
       false
     );
